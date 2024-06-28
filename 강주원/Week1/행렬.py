@@ -22,4 +22,7 @@ else:
                 res += 1
                 check(i, j)
 
+if mat_a != mat_b:
+    res = -1
+
 print(res)
