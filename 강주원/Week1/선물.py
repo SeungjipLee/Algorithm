@@ -1,9 +1,11 @@
-N, L, W, H = map(int, input().split())
-s, e = 0, max(L, W, H)
-for _ in range(100):
-    m = (s+e)/2
-    if (L//m)*(W//m)*(H//m) >= N:
-        s = m
+n, l, w, h = map(int, input().split())
+
+start, end = 0, max(l, w, h)
+for i in range(100):
+    mid = (start + end) / 2
+    if (l // mid) * (w // mid) * (h // mid) >= n:
+        start = mid
     else:
-        e = m
-print("%.10f" %(e))
+        end = mid
+
+print(end)
