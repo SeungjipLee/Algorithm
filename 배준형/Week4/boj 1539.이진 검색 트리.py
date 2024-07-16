@@ -1,44 +1,44 @@
-import sys
+import sys, bisect
 input = sys.stdin.readline
 
 # 트리를 직접만들며 높이를 재면 시간초과
 # 250000개의 숫자를 불러오면서 
 # 입력된 수가 (1 ~ logN 의 시간 안에)몇번째 높이인지를 알아야하거나 // 이진 탐색으로 이게 가능한가
 # 높이의 합을 반환하는 특별한 로직이 있거나 // 이 경우는 생각해내기가 많이 힘들어보임
+# def binary_search(n, s, e):
+#     while s < e:
+#         mid = (s+e)//2
 
-# 시간 초과 1 % 
+#         if arr[mid] < n:
+#             s = mid + 1
+#         else:
+#             e = mid
+#     return e
+
 N = int(input())
-ls = [0] * (N+1)
-# 새로 들어오는 원소는 lower_bound 혹은 그 이전원소에 붙음
-# 어떻게 조회함.. 
-pre = -1
-max_num = -1
-min_num = N
+arr = []
+hs = [0] * N
+
 for _ in range(N):
     num = int(input())
-    if min_num > num:
-        ls[num] = ls[min_num] + 1
-        min_num = num
+    # idx = binary_search(num, 0, len(arr))
+    idx = bisect.bisect_left(arr, num)
+    left = 0
+    right = 0
+    if idx > 0:
+        left = hs[arr[idx-1]]
+    if idx < len(arr):
+        right = hs[arr[idx]]
+    hs[num] = max(left, right) + 1
+    arr.insert(idx, num)
 
-    if max_num < num:
-        ls[num] = ls[max_num] + 1    
-        max_num = num
-        continue
-    pre = -1
-    for i in range(N):
-        if ls[i]:
-            if i > num:
-                break
-            pre = i
-    ls[num] = max(ls[pre], ls[i]) + 1
-
-print(sum(ls))
-
+print(sum(hs))
 # --------------------------------------------------------------------------------------
-# 시간 초과 44 % 
+# # 시간 초과 44 % 
 # N = int(input())
 # arr = [] # item = [num, heigth, left, right] left,right == 0: None
-# arr.append([int(input()), 1, 0, 0])
+# # arr.append([int(input()), 1, 0, 0])
+# arr.append([N-1, 1, 0, 0])
 # len_arr = 1
 # answer = 1
 # # 새로 입력되는 값의 높이를 알려면 어떻게 해야할까...
@@ -61,13 +61,7 @@ print(sum(ls))
 #             return mid + 1
 #         else:
 #             return mid
-#     # if mid == s:
-#     #     if arr[mid][0] < n:
-#     #         return mid + 1
-#     #     else:
-#     #         return mid
-    
-#     # s, mid, e 가 있다 0 0 1 라고 하자
+
 #     if arr[mid][0] < n:
 #         s = mid + 1
 #         return binary_search(n, s, e)
@@ -76,8 +70,9 @@ print(sum(ls))
 #         return binary_search(n, s, e)
         
     
-# for _ in range(N-1):
-#     num = int(input())
+# for _ in range(N-2, -1, -1):
+#     # num = int(input())
+#     num = _
 #     if len_arr == 1:
 #         if arr[0][0] > num:
 #             arr[0][2] = 1 
@@ -90,7 +85,6 @@ print(sum(ls))
 #         continue
     
 #     idx = binary_search(num, 0, len_arr-1)
-
 #     if idx == 0:
 #         arr[idx][2] = 1
 #         arr.insert(idx, [num, arr[idx][1]+1, 0, 0])
@@ -100,14 +94,16 @@ print(sum(ls))
 #         arr.insert(idx, [num, arr[idx-1][1]+1, 0, 0])
 #         answer += arr[idx][1]
 #     else:
-#         if not arr[idx-1][3]: # 왼쪽의 오른쪽이 비어있다면
-#             arr[idx-1][3] = 1
-#             arr.insert(idx, [num, arr[idx-1][1]+1, 0, 0])
-#             answer += arr[idx][1]
-#         else:
-#             arr[idx][2] = 1
-#             arr.insert(idx, [num, arr[idx][1]+1, 0, 0])
-#             answer += arr[idx][1]
+#         arr.insert(idx, [num, max(arr[idx-1][1], arr[idx][1])+1, 0, 0])
+#         answer += arr[idx][1]
+#     #     if not arr[idx-1][3]: # 왼쪽의 오른쪽이 비어있다면
+#     #         arr[idx-1][3] = 1
+#     #         arr.insert(idx, [num, arr[idx-1][1]+1, 0, 0])
+#     #         answer += arr[idx][1]
+#     #     else:
+#     #         arr[idx][2] = 1
+#     #         arr.insert(idx, [num, arr[idx][1]+1, 0, 0])
+#     #         answer += arr[idx][1]
             
 #     len_arr += 1
 #     # print(idx, arr)
