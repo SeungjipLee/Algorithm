@@ -9,7 +9,8 @@ res = 1e9
 def back(start, v, cost, depth):
     global res
     if depth == n:
-        res = min(res, cost+arr[v][start])
+        if arr[v][start]:
+            res = min(res, cost+arr[v][start])
         return
     
     if cost > res:
@@ -25,4 +26,5 @@ for i in range(n):
     visit[i] = 1
     back(i, i, 0, 1)
     visit[i] = 0
+
 print(res)
