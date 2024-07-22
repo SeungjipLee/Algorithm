@@ -15,47 +15,25 @@ def solution(board):
         while q:
             x, y, cnt = q.popleft()
             for i in [(1,0), (0,1), (-1,0), (0,-1)]:
-                nx = x + i[0]
-                ny = y + i[1]
-                if nx < 0 or ny < 0 or nx >= r or ny >= c or board[nx][ny] == 'D':
-                    continue
-                if i[0] == 1:
-                    while 1:
-                        if nx >= r or board[nx][ny] == 'D':
-                            nx -= 1
-                            break
-                        nx += 1
-                elif i[0] == -1:
-                    while 1:
-                        if nx < 0 or board[nx][ny] == 'D':
-                            nx += 1
-                            break
-                        nx -= 1
-                elif i[1] == 1:
-                    while 1:
-                        if ny >= c or board[nx][ny] == 'D':
-                            ny -= 1
-                            break
-                        ny += 1
-                elif i[1] == -1:
-                    while 1:
-                        if ny < 0 or board[nx][ny] == 'D':
-                            ny += 1
-                            break
-                        ny -= 1
-                if board[nx][ny] == 'G':
+                xx, yy = x, y
+                while 1:
+                    nx = xx + i[0]
+                    ny = yy + i[1]
+                    if nx < 0 or ny < 0 or nx >= r or ny >= c or board[nx][ny] == 'D':
+                        break
+                    xx = nx
+                    yy = ny
+
+                if board[xx][yy] == 'G':
                     return cnt + 1
                 
-                if visit[nx][ny]:
+                if visit[xx][yy]:
                     continue
 
-                visit[nx][ny] = 1
-                q.append([nx,ny,cnt+1])
+                visit[xx][yy] = 1
+                q.append([xx,yy,cnt+1])
 
         return -1
 
     answer = bfs(x, y)
     return answer
-
-board = ["...D..R", ".D.G...", "....D.D", "D....D.", "..D...."]
-print(solution(board))
