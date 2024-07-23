@@ -1,106 +1,180 @@
-import sys
 import math
+import sys
 def minput(): return map(int, sys.stdin.readline().split())
-# 이진탐색트리에서 해당 숫자 지우기..
 
 N, K = minput()
-# print(N, K )
+
 arr = [i for i in range(1, N+1)]
 arr_idx = [0] * N
 arr_dict = {}
 t = 2 ** (int(math.log2(N)) + 1)
-# print(t)
-seg_tree = [[0, 0, 0] for _ in range(2*t)]
-# seg_tree = [[0, 0, 0] for _ in range(2*N)]
-# print(seg_tree)
+seg_tree = [0] * 2*t
+
 answer = "<"
 def make_seg(i, s, e):
-    # print(i, s, e)
     if s > e:
         return 0
     if s == e:
-        seg_tree[i] = [1, 0, 0]
+        seg_tree[i] = 1
         arr_idx[s] = i
         arr_dict[i] = s
-        return seg_tree[i]
+        return 1
     else:
         left = make_seg(i*2, s, (s+e)//2)
         right = make_seg(i*2+1, (s+e)//2+1, e)
-        seg_tree[i] = [left[0] + right[0], left[0], right[0]]
-        return seg_tree[i]
+        seg_tree[i] = left + right
+        return left + right
+    
 make_seg(1, 0, N-1)
-
-cur = arr_idx[0]
-for _ in range(N):
-
-    if _ == 0:
-        cnt = K-1
-    else:
-        cnt = K
-
-    # cnt 가 클때는 계속 위로 보내기
+# print(seg_tree)
+print("<", end="")
+cnt = K
+for i in range(N):
+    cur = 1
+    s = 1
+    e = N
+    c = cnt
+    # cnt 는 남은거 중에 몇 번째냐
     while True:
-        if cnt == 0 or cur == 1:
+        seg_tree[cur] -= 1
+        
+        if s == e:
             break
-        if cur % 2 == 0:
-            cur //= 2
-            r = seg_tree[cur][2]
-            if r < cnt:
-                cnt -= r
-                continue
-            else:
-                cur = cur * 2 + 1
-                break
+        mid = (s+e)//2
+
+        if seg_tree[cur*2] < c:
+            s = mid + 1
+            c -= seg_tree[cur*2]
+            cur = cur*2 + 1
         else:
-            cur //= 2
-
-    if cur == 1:   
-        # 맨위에서는 K 좀 깍아내고
-        if cnt > seg_tree[1][0]:
-            cnt %= seg_tree[1][0]
-        # 좌우 체크
-        if cnt > seg_tree[1][1]:
-            cur = 3
-            cnt -= seg_tree[1][1]
-        else:
-            cur = 2
-
-    if cnt == 0:
-        cnt = 1    
-    # cnt 가 작을때는 아래로 보내기
-    while cnt != 0:
-        if seg_tree[cur] == [1, 0, 0]:
-            cnt -= 1
-            continue
-
-        if seg_tree[cur][1] < cnt:
-            cnt -= seg_tree[cur][1]
+            e = mid
             cur *= 2
-            cur += 1
-        else:
-            cur *= 2
-    
-    
-    # 도착지점 나올거아니냐
-    # 도착지점 0 만들고 업데이트하기
-    pre = cur
-    while cur != 1:
-        if cur % 2 == 0:
-            seg_tree[cur//2][0] -= 1
-            seg_tree[cur//2][1] -= 1
-        else:
-            seg_tree[cur//2][0] -= 1
-            seg_tree[cur//2][2] -= 1
-        cur //= 2
-    cur = pre
-    
-    answer += str(arr_dict[pre]+1)
-    if _ != N-1:
-        answer += ", "
+    print(str(s), end="")
+
+    if i != N-1:
+        print(",", end=" ")
+        cnt = (cnt+K-2)%seg_tree[1]+1
     else:
-        answer += ">"
+        print(">")
 
-print(answer)
+
+# import random
+
+# Function to generate a test case
+# def generate_test_case():
+#     a = random.randint(80000, 100000) 
+#     b = random.randint(1, 100000) 
+#     # if a >= b: 
+#     #     return a, b
+#     # else:
+#     #     return b, a
+#     return 7, 3
+
+
+# import sys
+# import math
+# def minput(): return map(int, sys.stdin.readline().split())
+# # 이진탐색트리에서 해당 숫자 지우기..
+
+# N, K = minput()
+# if N == 1:
+#     print("<1>")
+#     exit()
+# arr = [i for i in range(1, N+1)]
+# arr_idx = [0] * N
+# arr_dict = {}
+# t = 2 ** (int(math.log2(N)) + 1)
+# # print(t)
+# seg_tree = [[0, 0, 0] for _ in range(2*t)]
+# # seg_tree = [[0, 0, 0] for _ in range(2*N)]
+# answer = "<"
+# def make_seg(i, s, e):
+#     # print(i, s, e)
+#     if s > e:
+#         return 0
+#     if s == e:
+#         seg_tree[i] = [1, 0, 0]
+#         arr_idx[s] = i
+#         arr_dict[i] = s
+#         return seg_tree[i]
+#     else:
+#         left = make_seg(i*2, s, (s+e)//2)
+#         right = make_seg(i*2+1, (s+e)//2+1, e)
+#         seg_tree[i] = [left[0] + right[0], left[0], right[0]]
+#         return seg_tree[i]
+# make_seg(1, 0, N-1)
+# # print(seg_tree)
+
+# cur = arr_idx[0]
+# for _ in range(N):
+
+#     if _ == 0:
+#         cnt = K-1
+#     else:
+#         cnt = K
+
+#     # cnt 가 클때는 계속 위로 보내기
+#     while True:
+#         if cnt == 0 or cur == 1:
+#             break
+#         if cur % 2 == 0:
+#             cur //= 2
+#             r = seg_tree[cur][2]
+#             if r < cnt:
+#                 cnt -= r
+#                 continue
+#             else:
+#                 cur = cur * 2 + 1
+#                 break
+#         else:
+#             cur //= 2
+
+#     if cur == 1:   
+#         # 맨위에서는 K 좀 깍아내고
+#         if cnt > seg_tree[1][0]:
+#             cnt %= seg_tree[1][0]
+#         # 좌우 체크
+#         if cnt > seg_tree[1][1]:
+#             cur = 3
+#             cnt -= seg_tree[1][1]
+#         else:
+#             cur = 2
+#     if cnt == 0:
+#         cnt = 1    
+#     # cnt 가 작을때는 아래로 보내기
+#     while cnt != 0:
+#         if seg_tree[cur] == [1, 0, 0]:
+#             cnt -= 1
+#             continue
+
+#         if seg_tree[cur][1] < cnt:
+#             cnt -= seg_tree[cur][1]
+#             cur *= 2
+#             cur += 1
+#         else:
+#             cur *= 2
+    
+    
+#     # 도착지점 나올거아니냐
+#     # 도착지점 0 만들고 업데이트하기
+#     pre = cur
+#     while cur != 1:
+#         if cur % 2 == 0:
+#             seg_tree[cur//2][0] -= 1
+#             seg_tree[cur//2][1] -= 1
+#         else:
+#             seg_tree[cur//2][0] -= 1
+#             seg_tree[cur//2][2] -= 1
+#         cur //= 2
+#     cur = pre
+    
+#     answer += str(arr_dict[pre]+1)
+#     if _ != N-1:
+#         answer += ", "
+#     else:
+#         answer += ">"
+
+# print(answer)
     
     
 
@@ -154,3 +228,46 @@ print(answer)
 # 인덱스가 조정되야 함 == 틀린 풀이
 # 수가 바뀐다. 0번째 수가 바뀌면 뒤가 모두 바뀐다.
 # => 세그먼트 트리로 수를 변경하고 합을 변경해도 lgN
+
+# import math
+# import sys
+# sys.setrecursionlimit(10**9)
+# input = sys.stdin.readline
+
+# def init(node, start, end):
+#   if start == end:
+#     tree[node] = 1
+#     return
+  
+#   mid = (start+end)//2
+#   init(2*node, start, mid)
+#   init(2*node+1, mid+1, end)
+#   tree[node] = tree[node*2]+tree[node*2+1]
+
+
+# def query(node, start, end, order):
+#   tree[node] -= 1
+#   if start == end:
+#     return start
+#   mid = (start+end)//2
+#   if tree[2*node] >= order:
+#     return query(2*node, start, mid, order)
+  
+#   return query(2*node+1, mid+1, end, order - tree[2*node])
+
+
+# n, k = map(int, input().split())
+# logN = int(math.log2(n))
+# tree = [0]*(2 * 2**(logN+1))
+# order = k
+# init(1,1,n)
+# # print("<", end = "")
+# print(tree)
+# for _ in range(1, n):
+#   print(order)
+#   query(1,1,n, order)
+# #   print(query(1,1,n, order), end = ", ")
+#   order += k-1
+#   order = (order-1)%tree[1]+1
+
+# # print(query(1,1,n,order), end = ">")
