@@ -31,7 +31,7 @@ input = sys.stdin.readline
 n = int(input())
 board = [list(input().rstrip()) for _ in range(n)]
 def check():
-    max_cnt = 1  # total_max_cnt
+    max_cnt = 1
     for i in range(n):
         # 가로
         cnt = 1
@@ -54,6 +54,9 @@ def check():
 
 res = 0
 res = max(res, check())
+if res == n:
+    print(n)
+    exit()
     
 # 0,0 에서 시작해서 오른쪽과 아래를 탐색한다.
 for i in range(n):
