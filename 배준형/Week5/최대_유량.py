@@ -37,8 +37,8 @@ for _ in range(N):
 def dfs():
     amount_flow = 0
     
-    # while True:
-    for _ in range(1):
+    while True:
+    # for _ in range(1):
         q = deque()
         path = {u : "" for u in adj_dict}
         visited = {u : False for u in adj_dict}
@@ -49,16 +49,18 @@ def dfs():
         while q:
             now = q.popleft()
             for nxt in adj_dict[now]:
-                print(adj_dict)
                 if visited[nxt]:
                     continue
+                if not switched[now][nxt] and adj_dict[now][nxt] == 0 and adj_dict[nxt][now] > 0:
+                    adj_dict[now][nxt], adj_dict[nxt][now] =\
+                         adj_dict[nxt][now], adj_dict[now][nxt]
                 if adj_dict[now][nxt] <= 0:
                     continue
-                print(now, nxt)
+                # print(now, nxt)
                 q.append(nxt)
                 path[nxt] = now
                 visited[nxt] = True
-        
+
         if not visited["Z"]:
             break
         
@@ -66,6 +68,8 @@ def dfs():
         min_C = int(10e9)
         while cur != "A":
             pre = path[cur]
+            switched[pre][cur] = True
+            switched[cur][pre] = True
             min_C = min(min_C, adj_dict[pre][cur])
             cur = pre
             
@@ -78,6 +82,6 @@ def dfs():
             
         amount_flow += min_C
     return amount_flow           
-    
+
+switched = {u2 : {u:False for u in adj_dict} for u2 in adj_dict}
 print(dfs())
-# print(adj_dict)
