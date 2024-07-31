@@ -6,7 +6,7 @@ check = end / m
 
 while start <= end:
     mid = (start+end) // 2
-    if check > end or check < start:
+    if check > end:
         break
     total, cnt = 0, 1
     for i in ls:
