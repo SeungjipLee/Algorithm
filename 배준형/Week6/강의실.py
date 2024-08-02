@@ -3,9 +3,11 @@ import sys
 input_ = sys.stdin.readline
 def minput(): return map(int, input_().split())
 
-N = int(input_())
+# N = int(input_())
 
-arr = [list(minput()) for _ in range(N)]
+# arr = [list(minput()) for _ in range(N)]
+N = 100_000
+arr = [[i, 1, i+3] for i in range(100000)]
 arr.sort(key=lambda x: (x[1], x[2]-x[1]))
 
 classes = [0] * (N+1)
@@ -18,7 +20,7 @@ for i in range(N):
             classes[i] = e
             break
     
-for i in range(N):
+for i in range(N+1):
     if classes[i] == 0:
         print(i)
         break
