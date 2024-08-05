@@ -1,32 +1,62 @@
-from pprint import pprint
+from collections import deque
 
 board = ["...D..R", ".D.G...", "....D.D", "D....D.", "..D...."]
 
 n = len(board)
 m = len(board[0])
-board_cnt = [[-1]*m for _ in range(n)]
+answer = 0
+
+# 4방향(좌 우 상 하)
+dn, dm = [0, 0, -1, 1], [-1, 1, 0, 0]
+start = [-1, -1]
+visit = [[False] * m for _ in range(n)]
 
 
-"""
--1 : 빈 공간
-0 : 시작 점
--2 : 벽
-"""
-start_n = start_m = 0
-goal_n = goal_m = 0
+def move(i, j, dir):
+    global n, m
+
+    while True:
+        i += dn[dir]
+        j += dm[dir]
+        if i < 0 or i >= n or j < 0 or j >= m:
+            i -= dn[dir]
+            j -= dm[dir]
+            break
+        elif board[i][j] == 'D':
+            i -= dn[dir]
+            j -= dm[dir]
+            break
+    return [i, j]
+
 
 for i in range(n):
     for j in range(m):
-        if board[i][j] == "D":
-            board_cnt[i][j] = -2
-        elif board[i][j] == "R":
-            board_cnt[i][j] = 1
-            start_n, start_m = i, j
-        elif board[i][j] == "G":
-            board_cnt[i][j] = -3
-            goal_n, goal_m = i, j
+        if board[i][j] == 'R':
+            start = [i, j]
+            break
+    if start[0] != -1:
+        break
 
-pprint(board_cnt)
-print(start_n, start_m)
-print(goal_n, goal_m)
+Q = deque()
+Q.appendleft([start[0], start[1], 0])
+visit[start[0]][start[1]] = True
 
+while Q:
+    i, j, dis = Q.pop()
+    for k in range(4):
+        N, M = move(i, j, k)
+
+        if visit[N][M]:
+            continue
+        elif board[N][M] == 'G':
+            answer = dis + 1
+            Q = []
+            break
+        else:
+            visit[N][M] = True
+            Q.appendleft([N, M, dis + 1])
+
+if answer == 0:
+    answer = -1
+
+print(answer)
