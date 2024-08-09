@@ -24,6 +24,6 @@ def bfs(x):
                 visit[i] = cnt
                 q.append(i)                
 
-bfs(1)
+bfs(r)
 for i in visit[1:]:
     print(i)
