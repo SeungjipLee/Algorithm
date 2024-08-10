@@ -33,21 +33,24 @@ input_ = sys.stdin.readline
 infix = input_().rstrip()
 q = deque(list(infix))
 
-# 연산을 하는데 
-# 괄호를 만나면 새로 시작
+# 후위 표기식 만들기
 def make_postfix():
     num_stack = []
     operator_stack = []
     while q:
         now = q.popleft()
         
+        # 여는 괄호 시 재귀함수 호출
         if now == "(":
             now = make_postfix()
+        # 닫는 괄호 시 stack 의 top을 반환
         elif now == ")":
             return num_stack.pop()
+        # 더하기와 빼기는 연산자 스택에 추가
         elif now in "+-":
             operator_stack.append(now)
             continue
+        # 곱하기와 나누기는 스택의 탑과 다음 항을 불러와 바로 연산
         elif now in "*/":
             nxt = q.popleft()
             if nxt == "(":
@@ -55,12 +58,15 @@ def make_postfix():
             num_stack.append(num_stack.pop()+nxt+now)
             continue
         
+        # 피연산자 스택에 아무것도 없다면 현재값을 추가
         if not num_stack:
             num_stack.append(now)
             continue
         
-        while q:
-            
+        # 여기까지 왔다는 것은 + 혹은 - 연산을 진행해야 할 차례
+        # 다음 항에 곱하기 혹은 나누기 연산이 있을 수 있으므로
+        # 가능한 만큼 연산하기
+        while q:  
             op = q.popleft()
             if op in "*/":
                 nxt = q.popleft()
@@ -70,10 +76,12 @@ def make_postfix():
             else:
                 q.appendleft(op)
                 break
-                                
+        
+        # 더하기, 빼기를 들고와 연산 후 스택에 다시 저장
         if operator_stack:
             num_stack.append(num_stack.pop()+now+operator_stack.pop())
-        
+    
+    # 결과물 반환
     return num_stack[0]
 
 print(make_postfix())
