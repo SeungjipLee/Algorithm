@@ -15,10 +15,11 @@ def check():
     
     return False
 
+
 for i in range(p):
     current[ls[i]] += 1
 
-if all(current[char] >= required[char] for char in "ACGT"):
+if check():
     res += 1
 
 for i in range(p,s):
