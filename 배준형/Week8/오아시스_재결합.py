@@ -51,7 +51,7 @@ end = -1
 
 for _ in range(N):
     num = int(input_())
-    # print(num, stack, answer, top)
+    print(num, stack, answer, top)
     if top == -1:
         top += 1
         stack[top] = [num, 1]

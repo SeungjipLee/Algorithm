@@ -10,46 +10,82 @@
 import sys, math
 def minput(): return map(int, sys.stdin.readline().split())
 
-def make_tree(value, cur, idx, s, e):
-    if seg_tree[cur] == -1:
-        seg_tree[cur] = value
-    else:
-        seg_tree[cur] = min(seg_tree[cur], value)
-        
-    if s == e:
-        return cur
-    
-    mid = (s+e)//2
-    
-    if mid < idx:
-        return make_tree(value, cur*2+1, idx, mid+1, e)
-    return make_tree(value, cur*2, idx, s, mid)
 
-# 사이즈 췤~!
-def size_check(cur, size):
-    
-    pass
-    
 while True:
     arr = list(minput())
     
     if arr[0] == 0:
         break
     
-    N, *histogram = arr
-    seg_size = 2 * 2 ** (int(math.log2(N))+1)
-    seg_tree = [-1] * seg_size
-    seg_idxs = [0] * N
-    answer = 0
-    
+    N = arr[0]
+    arr = arr[1:]
+    stack = []
+    max_area = 0
+
     for i in range(N):
-        seg_idxs[i] = make_tree(histogram[i], 1, i, 0, N-1)
+        # print(stack)
+        now = arr[i]
+        if stack:
+            height, started = stack[-1]
+            if height == now:
+                continue
+            elif height < now:
+                stack.append([now, i])
+            else:
+                while stack and stack[-1][0] > now:
+                    height, started = stack.pop()
+                    max_area = max(max_area, height * (i - started))
+                if not stack or stack[-1][0] != now:
+                    stack.append([now, started])
+        else:
+            stack.append([now, i])
+    i += 1
+    while stack:
+        height, started = stack.pop()
+        max_area = max(max_area, height * (i - started))
+    print(max_area)
+
+
+# def make_tree(value, cur, idx, s, e):
+#     if seg_tree[cur] == -1:
+#         seg_tree[cur] = value
+#     else:
+#         seg_tree[cur] = min(seg_tree[cur], value)
+        
+#     if s == e:
+#         return cur
     
-    for i in range(N):
-        # 하나씩 자신의 오른쪽 보면서 최솟값 x 길이 로 너비 체크
-        # 너비가 작아진다면 왼쪽으로 이동 커진다면 오른쪽으로 이동
-        # 시작점
-        start = seg_idxs[i]
+#     mid = (s+e)//2
+    
+#     if mid < idx:
+#         return make_tree(value, cur*2+1, idx, mid+1, e)
+#     return make_tree(value, cur*2, idx, s, mid)
+
+# # 사이즈 췤~!
+# def size_check(cur, size):
+    
+#     pass
+    
+# while True:
+#     arr = list(minput())
+    
+#     if arr[0] == 0:
+#         break
+    
+#     N, *histogram = arr
+#     seg_size = 2 * 2 ** (int(math.log2(N))+1)
+#     seg_tree = [-1] * seg_size
+#     seg_idxs = [0] * N
+#     answer = 0
+    
+#     for i in range(N):
+#         seg_idxs[i] = make_tree(histogram[i], 1, i, 0, N-1)
+    
+#     for i in range(N):
+#         # 하나씩 자신의 오른쪽 보면서 최솟값 x 길이 로 너비 체크
+#         # 너비가 작아진다면 왼쪽으로 이동 커진다면 오른쪽으로 이동
+#         # 시작점
+#         start = seg_idxs[i]
         
         
 
