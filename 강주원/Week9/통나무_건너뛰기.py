@@ -1,5 +1,4 @@
 import sys, heapq
-from collections import deque
 input = sys.stdin.readline
 
 t = int(input())
@@ -15,7 +14,6 @@ def sol():
         idx += 1
         if arr:
             ls.insert(-idx, heapq.heappop(arr))
-        
 
     res = 0
     for i in range(n):
@@ -26,7 +24,3 @@ def sol():
 
 for tc in range(t):
     print(sol())
-
-'''
-10 11 12 13 12 11 10
-'''
