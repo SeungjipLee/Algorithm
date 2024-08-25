@@ -5,6 +5,7 @@ n, m = map(int, input().split())
 ls = [int(input()) for _ in range(n)]
 
 l, r = min(ls), sum(ls)
+max_amount = max(ls)
 
 def sol(amount):
     cnt = 1
@@ -23,6 +24,10 @@ def sol(amount):
 res = r
 while l <= r:
     mid = (l+r) // 2
+    if mid < max_amount:
+        l = mid + 1
+        continue
+    
     if sol(mid):
         res = mid
         r = mid - 1
