@@ -5,9 +5,9 @@ INF = int(1e6)
 
 def build_tree():
     for i in range(size, size+N):
-        seg_tree[i] = [arr[i-size], 1]
+        seg_tree[i] = [arr[i-size], arr[i-size], 1]
     for i in range(size-1, 0, -1):
-        seg_tree[i] = [max(seg_tree[2*i][0], seg_tree[2*i+1][0]), seg_tree[2*i][1] + seg_tree[2*i+1][1]]
+        seg_tree[i] = [min(seg_tree[2*i][0], seg_tree[2*i+1][0]), max(seg_tree[2*i][1], seg_tree[2*i+1][1]), seg_tree[2*i][2] + seg_tree[2*i+1][2]]
 
 def query(idx):
     val = seg_tree[size+idx][0]
@@ -27,10 +27,10 @@ def query(idx):
     return tmp
 
 def lower_count(idx, val):
-    if seg_tree[idx][0] < val:
-        return seg_tree[idx][1]
+    if seg_tree[idx][1] < val:
+        return seg_tree[idx][2]
     
-    if idx >= size:
+    if seg_tree[idx][0] > val:
         return 0
     
     return lower_count(idx*2, val) + lower_count(idx*2+1, val)
@@ -46,7 +46,7 @@ for i in range(N):
     arr[i] = dict_B[arr_A[i]]
 
 size = 2 ** (N-1).bit_length()
-seg_tree = [[INF, 0] for _ in range(2*size)]
+seg_tree = [[INF, 0, 0] for _ in range(2*size)]
 
 build_tree()
 answer = 0
