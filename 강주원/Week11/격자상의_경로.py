@@ -17,7 +17,12 @@ dp = [[0]*m for _ in range(n)]
 dp[0][0] = 1
 for i in range(ki+1):
     for j in range(kj+1):
-        dp[i][j] = dp[max(i - 1, 0)][j] + dp[i][max(j - 1, 0)]
+        if i == 0 and j == 0:
+            continue
+
+        r = dp[i-1][j]
+        c = dp[i][j-1]
+        dp[i][j] = r + c
 
 
 for i in range(ki,n):
@@ -28,7 +33,6 @@ for i in range(ki,n):
         r = dp[i-1][j]
         c = dp[i][j-1]
         dp[i][j] = r + c
-
 
 
 print(dp[n-1][m-1])
