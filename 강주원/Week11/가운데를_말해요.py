@@ -14,9 +14,7 @@ for i in range(n):
         heapq.heappush(max_heap, -k)
     else:
         heapq.heappush(min_heap, k)
-    if min_heap:
-        m = min_heap[0]
-    M = max_heap[0]
+
     if min_heap and min_heap[0] < -max_heap[0]:
         heapq.heappush(max_heap, -heapq.heappop(min_heap))
         heapq.heappush(min_heap, -heapq.heappop(max_heap))
