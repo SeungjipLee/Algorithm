@@ -43,7 +43,6 @@ for min_cost in min_costs:
         continue
     
     res *= (min_cost + 1)
-    res %= 1000000007
 
 res -= 1
 print(res%1000000007)
