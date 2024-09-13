@@ -9,5 +9,5 @@ def sol(n, start, end):
     print(start, end)
     sol(n-1, 6-start-end, end)
 
-print(n**2-2)
+print(2**n-1)
 sol(n, 1, 3)
