@@ -1,0 +1,16 @@
+=====================================
+
+SELECT USER_ID, PRODUCT_ID
+FROM ONLINE_SALE
+GROUP BY USER_ID, PRODUCT_ID
+HAVING COUNT(*) >= 2
+ORDER BY USER_ID ASC, PRODUCT_ID DESC
+
+=====================================
+
+[해석]
+ONLINE_SALE 테이블에서
+USER_ID, PRODUCT_ID => 2가지 항목을 추출
+중복이 2개 이상인 것들을 모아서
+USER_ID, PRODUCT_ID => 2가지 정보를 담아 출력
+USER_ID는 오름차순, PRODUCT_ID는 내림차순

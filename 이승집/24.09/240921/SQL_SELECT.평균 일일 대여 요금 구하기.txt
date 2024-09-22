@@ -1,0 +1,13 @@
+====================================
+
+SELECT ROUND(AVG(DAILY_FEE)) AS "AVERAGE_FEE"
+FROM CAR_RENTAL_COMPANY_CAR
+WHERE CAR_TYPE = "SUV"
+
+====================================
+
+[해석]
+CAR_RENTAL_COMPANY_CAR 테이블에서
+CAR_TYPE 이 "SUV"인 것들의
+DAILY_FEE의 평균값을 반올림하여
+"AVERAGE_FEE"로 이름지어 한 것
