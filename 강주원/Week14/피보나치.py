@@ -24,7 +24,7 @@ def binary(start, end, target):
 
 for tc in range(t):
     n = int(input())
-    res = deque()
+    res = []
 
     start, end = 1, 45
     while n > 0:
