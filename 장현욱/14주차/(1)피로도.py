@@ -15,3 +15,50 @@
 # "최소 필요 피로도"와 "소모 피로도"는 1 이상 1,000 이하인 자연수입니다.
 # 서로 다른 던전의 ["최소 필요 피로도", "소모 피로도"]가 서로 같을 수 있습니다.
 
+# 완탐법
+import itertools
+def solution(k, dungeons):
+    answer = 0
+    # 던전들 도는 경우의 수
+    dungeon = [list(item) for item in itertools.permutations(dungeons, len(dungeons))]
+
+    for i in dungeon:
+        count = 0
+        stamina = k
+        for j in i:
+            if stamina >= j[0]:  # 제한 피로도에 적정
+                count += 1
+                stamina -= j[1]
+            else:
+                break
+        if answer < count:
+            answer = count
+        if answer == len(dungeons):
+            break
+    return answer
+
+
+# dfs방법
+answer = 0
+N = 0
+visited = []
+
+
+def dfs(k, cnt, dungeons):
+    global answer
+    if cnt > answer:
+        answer = cnt
+
+    for j in range(N):
+        if k >= dungeons[j][0] and not visited[j]:
+            visited[j] = 1
+            dfs(k - dungeons[j][1], cnt + 1, dungeons)
+            visited[j] = 0
+
+
+def solution(k, dungeons):
+    global N, visited
+    N = len(dungeons)
+    visited = [0] * N
+    dfs(k, 0, dungeons)
+    return answer
