@@ -1,0 +1,64 @@
+====================
+SELECT
+  ii.ITEM_ID,
+  ii.ITEM_NAME,
+  ii.RARITY
+FROM
+  ITEM_INFO ii
+WHERE
+  ii.ITEM_ID IN (
+    SELECT it.ITEM_ID
+    FROM ITEM_TREE it
+    WHERE it.PARENT_ITEM_ID IN (
+      SELECT ITEM_ID
+      FROM ITEM_INFO
+      WHERE RARITY = 'RARE'
+    )
+  )
+ORDER BY
+  ii.ITEM_ID DESC;
+
+====================
+
+SQL 쿼리 해석:
+
+1. 필요한 컬럼 선택:
+
+"""
+SELECT
+  ii.ITEM_ID,
+  ii.ITEM_NAME,
+  ii.RARITY
+"""
+
+ITEM_INFO 테이블에서 ITEM_ID, ITEM_NAME, RARITY 컬럼을 선택합니다. ITEM_INFO 테이블은 ii로 별칭을 주었습니다.
+
+
+2. 다음 업그레이드 아이템 필터링:
+
+"""
+WHERE
+  ii.ITEM_ID IN (
+    SELECT it.ITEM_ID
+    FROM ITEM_TREE it
+    WHERE it.PARENT_ITEM_ID IN (
+      SELECT ITEM_ID
+      FROM ITEM_INFO
+      WHERE RARITY = 'RARE'
+    )
+  )
+"""
+
+서브쿼리 1: SELECT ITEM_ID FROM ITEM_INFO WHERE RARITY = 'RARE'
+희귀도가 'RARE'인 아이템들의 ITEM_ID를 가져옵니다.
+서브쿼리 2: SELECT it.ITEM_ID FROM ITEM_TREE it WHERE it.PARENT_ITEM_ID IN (...)
+ITEM_TREE 테이블에서 PARENT_ITEM_ID가 서브쿼리 1의 결과에 있는 아이템들의 ITEM_ID를 찾습니다. 이는 'RARE' 아이템들의 다음 업그레이드 아이템들을 의미합니다.
+메인 WHERE 절: ii.ITEM_ID IN (...)
+메인 쿼리는 ITEM_ID가 서브쿼리 2의 결과에 있는 아이템들로 필터링합니다.
+
+3. 결과 정렬:
+"""
+ORDER BY
+  ii.ITEM_ID DESC;
+"""
+ITEM_ID를 기준으로 내림차순 정렬하여 요구사항에 맞게 결과를 정렬합니다.
