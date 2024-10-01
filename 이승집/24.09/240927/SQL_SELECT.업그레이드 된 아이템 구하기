@@ -17,7 +17,6 @@ WHERE
   )
 ORDER BY
   ii.ITEM_ID DESC;
-
 ====================
 
 SQL 쿼리 해석:
