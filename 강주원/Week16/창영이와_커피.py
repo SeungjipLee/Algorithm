@@ -10,10 +10,8 @@ dp[0] = 0
 l = 0
 for caffeine in caffeines:
     for j in range(l + caffeine, caffeine - 1, -1):
-        dp[j] = min(dp[j], dp[j - caffeine] + 1)
+        if dp[j - caffeine] + 1 < dp[j]:
+            dp[j] = dp[j - caffeine] + 1
     l += caffeine
 
-if dp[k] == 101:
-    print(-1)
-else:
-    print(dp[k])
+print(dp[k] if dp[k] != 101 else -1)
