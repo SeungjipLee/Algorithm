@@ -1,21 +1,18 @@
+import heapq
 n, k, a, b = map(int, input().split())
 
-d = n/a
-data = []
-count = 0
-check = 0
+flowerpots = [k] * n
+heapq.heapify(flowerpots)
 
-for _ in range(int(d)):
-    data.append(k)
-while True:
-    for i in range(int(d)):
-        data[i] -= 1
+day = 0
+while 0 not in flowerpots:
+    for i in range(a):
+        moisture = heapq.heappop(flowerpots)
+        heapq.heappush(flowerpots, moisture + b)
+    
+    for i in range(n):
+        flowerpots[i] -= 1
+    
+    day += 1
 
-    data[check] += b
-    check += 1
-    if check == int(d):
-        check = 0
-    count += 1
-    if min(data) == 0:
-        print(count)
-        break
+print(day)
