@@ -7,6 +7,7 @@ res = 240
 for i in p[1:]:
     if not i:
         res -= 60
+        
 a = [[] for _ in range(6)]
 for i in range(n):
     k, t = map(int, input().split())
