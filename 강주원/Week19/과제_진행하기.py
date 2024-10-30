@@ -6,21 +6,26 @@ def solution(plans):
     answer = []
     plans.sort(key=lambda x:x[1])
     task = []
-    for i in range(len(plans)-1):
+    for i in range(len(plans)):
+        if i == len(plans)-1:
+            task.append(plans[i])
+            break
+
         sub, start, time = plans[i]
         next_start = plans[i+1][1]
         start, next_start, time = time_to_minute(start), time_to_minute(next_start), int(time)
         # 과제 완료
-        if start + time  <= next_start:
+        if start + time <= next_start:
             answer.append(sub)
             자투리_시간 = next_start - (start+time)
-            while task and 자투리_시간 > 0:
+
+            while task and 자투리_시간 != 0:
                 task_time = task[-1][2]
                 if 자투리_시간 >= task_time:
                     answer.append(task.pop()[0])
                     자투리_시간 -= task_time
                 else:
-                    task[-1][2] -= task_time
+                    task[-1][2] -= 자투리_시간
                     자투리_시간 = 0
 
         # 과제 미완료
@@ -28,7 +33,8 @@ def solution(plans):
             task.append(plans[i])
             plans[i][2] = time - (next_start - start)
             
-
+    while task:
+        answer.append(task.pop()[0])
 
     return answer
 
