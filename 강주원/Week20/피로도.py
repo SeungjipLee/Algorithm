@@ -12,7 +12,7 @@ for i in range(24):
         fatigue += a
         total += b
     else:
-        t = max(t-c, 0)
+        fatigue = max(fatigue-c, 0)
 print(total)    
 '''
 250 250 100 500
